@@ -1,8 +1,10 @@
+/*
+ & REST CRUD operations on a document.
+ */
+
 const express = require('express');
 const router = express.Router();
 const {Doc} = require('./../models');
-
-
 
 // Delete all docs.
 router.delete('/all', (req, res) => {
@@ -92,9 +94,6 @@ router.get('/:id?', (req, res) => {
         res.status(400).send(err);
     });
 });
-
-
-
 
 
 module.exports = router;
