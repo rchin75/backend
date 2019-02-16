@@ -4,14 +4,16 @@
   "description": "Generic Backend Server",
   "main": "server/app.js",
   "scripts": {
-    "server" : "nodemon server/app.js",
+    "server": "nodemon --watch server --watch client -e js,html,css,less --delay 1000ms server/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "R.T.H. Chin",
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.4",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "sequelize": "^4.42.0",
+    "sqlite3": "^4.0.6"
   },
   "devDependencies": {
     "nodemon": "^1.18.10"
