@@ -1,0 +1,14 @@
+{
+  "name": "backend",
+  "version": "0.0.1",
+  "description": "Generic Backend Server",
+  "main": "server/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "R.T.H. Chin",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
