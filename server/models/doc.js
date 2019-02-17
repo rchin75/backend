@@ -3,7 +3,8 @@
  */
 module.exports = (sequelize, DataTypes) => {
     const Doc = sequelize.define('doc', {
-        contents: DataTypes.JSON
+        contents: DataTypes.JSON,
+        username: DataTypes.STRING
     });
 
     return Doc;

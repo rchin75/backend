@@ -3,7 +3,6 @@
  */
 
 const express = require('express');
-//const {Doc} = require('./../models');
 
 /**
  * Creates a new route instance for CRUD operations on the provided Doc-model.
@@ -58,12 +57,12 @@ module.exports = (Doc) => {
         let data = req.body;
 
         let doc = null;
-        if (data && data.hasOwnProperty('contents')) {
-            // A full doc was provided.
-            doc = data;
-        } else if (data) {
+        if (data && !data.hasOwnProperty('contents') && Doc.rawAttributes.hasOwnProperty('contents')) {
             // Only the contents was provided.
             doc = {contents: data};
+        } else if (data) {
+            // data was provided.
+            doc = data;
         } else {
             // 400: bad request.
             res.status(400).send('Invalid body');
@@ -91,9 +90,6 @@ module.exports = (Doc) => {
         } else if (!data.hasOwnProperty('id')) {
             // 400: bad request.
             res.status(400).send('Invalid body: no ID');
-        } else if (!data.hasOwnProperty('contents')) {
-            // 400: bad request.
-            res.status(400).send('Invalid body: no contents');
         } else {
             let update = extractModelAttributeValues(data);
             Doc.findById(parseInt(req.params.id)).then(doc =>{

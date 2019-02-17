@@ -1,8 +1,8 @@
 const express = require('express');
 const path = require('path');
 
-const {Doc, Article} = require('./models');
-const DocsRouter = require('./routes/docs');
+const {Doc, Article, Event, User} = require('./models');
+const crudRouter = require('./routes/crud');
 
 const {sequelize} = require('./models');
 
@@ -15,8 +15,11 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 // Docs CRUD operations route
-app.use('/docs', DocsRouter(Doc));
-app.use('/articles', DocsRouter(Article));
+app.use('/docs', crudRouter(Doc));
+app.use('/articles', crudRouter(Article));
+app.use('/events', crudRouter(Event));
+// Note: must be protected, only for admins
+app.use('/user', crudRouter(User));
 
 // Serve the static files in the client folder.
 app.use('/', express.static( path.join(__dirname, '../client') ));

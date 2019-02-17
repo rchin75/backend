@@ -7,7 +7,8 @@ module.exports = (sequelize, DataTypes) => {
         author: DataTypes.STRING,
         issue: DataTypes.STRING,
         sequenceNumber: DataTypes.INTEGER,
-        contents: DataTypes.JSON
+        contents: DataTypes.JSON,
+        username: DataTypes.STRING
     });
 
     return Article;
