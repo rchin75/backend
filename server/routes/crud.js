@@ -70,8 +70,12 @@ module.exports = (Doc) => {
         }
 
         doc = extractModelAttributeValues(doc);
+        if (req.user &&  (Doc.tableName !== 'users')) {
+            doc.owner = req.user.username;
+            doc.editor = req.user.username;
+        }
 
-        Doc.create(data).then(doc => {
+        Doc.create(doc).then(doc => {
             res.send(doc);
         }).catch(err => {
             res.status(400).send('Failed to save new doc');
@@ -92,6 +96,9 @@ module.exports = (Doc) => {
             res.status(400).send('Invalid body: no ID');
         } else {
             let update = extractModelAttributeValues(data);
+            if (req.user && (Doc.tableName !== 'users')) {
+                update.editor = req.user.username;
+            }
             Doc.findById(parseInt(req.params.id)).then(doc =>{
                 doc.update(update).then(() => {
                     res.send(doc);

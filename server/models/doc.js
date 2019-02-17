@@ -4,7 +4,8 @@
 module.exports = (sequelize, DataTypes) => {
     const Doc = sequelize.define('doc', {
         contents: DataTypes.JSON,
-        username: DataTypes.STRING
+        owner: DataTypes.STRING,
+        editor: DataTypes.STRING
     });
 
     return Doc;

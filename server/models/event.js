@@ -7,7 +7,8 @@ module.exports = (sequelize, DataTypes) => {
         startDate: DataTypes.DATE,
         endDate: DataTypes.DATE,
         contents: DataTypes.JSON,
-        username: DataTypes.STRING
+        owner: DataTypes.STRING,
+        editor: DataTypes.STRING
     });
 
     return Event;

@@ -8,7 +8,8 @@ module.exports = (sequelize, DataTypes) => {
         issue: DataTypes.STRING,
         sequenceNumber: DataTypes.INTEGER,
         contents: DataTypes.JSON,
-        username: DataTypes.STRING
+        owner: DataTypes.STRING,
+        editor: DataTypes.STRING
     });
 
     return Article;
