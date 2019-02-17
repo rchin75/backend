@@ -1,6 +1,8 @@
 const express = require('express');
 const path = require('path');
-const docs = require('./routes/docs');
+
+const {Doc, Article} = require('./models');
+const DocsRouter = require('./routes/docs');
 
 const {sequelize} = require('./models');
 
@@ -13,7 +15,8 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 // Docs CRUD operations route
-app.use('/docs', docs);
+app.use('/docs', DocsRouter(Doc));
+app.use('/articles', DocsRouter(Article));
 
 // Serve the static files in the client folder.
 app.use('/', express.static( path.join(__dirname, '../client') ));

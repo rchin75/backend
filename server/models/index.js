@@ -3,6 +3,7 @@
  */
 
 const DocModel = require('./doc');
+const ArticleModel = require('./article');
 
 // Create sqlite database connection.
 const path = require('path');
@@ -17,8 +18,9 @@ const sequelize = new Sequelize('database','username','password', {
 
 // Create the models.
 const Doc = DocModel(sequelize, Sequelize);
+const Article = ArticleModel(sequelize, Sequelize);
 
 // sequelize is also exported because it is used in app.js to instantiate the database tables.
 module.exports = {
-    sequelize, Doc
+    sequelize, Doc, Article
 };
