@@ -2,6 +2,7 @@
  * Create the models and setup the database connection.
  */
 
+const config = require('./../config');
 const DocModel = require('./doc');
 const ArticleModel = require('./article');
 const EventModel = require('./event');
@@ -9,12 +10,12 @@ const UserModel = require('./user');
 
 // Create sqlite database connection.
 const path = require('path');
-const dbPath = path.join(__dirname, '../../db.sqlite');
+const dbPath = path.join(__dirname, `../../${config.databasePath}`);
 const sqlite = require('sqlite3');
 const db = new sqlite.Database(dbPath);
 const Sequelize = require('sequelize');
-const sequelize = new Sequelize('database','username','password', {
-    dialect: 'sqlite',
+const sequelize = new Sequelize(config.databaseName, config.databaseUsername, config.databasePassword, {
+    dialect: config.databaseType,
     storage: dbPath
 });
 

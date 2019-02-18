@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const config = require('./config');
 
 const passport = require('./auth/passport');
 ///const cookieParser = require('cookie-parser');
@@ -17,8 +18,8 @@ const {sequelize} = require('./models');
 
 // Express server
 const app = express();
-const port = 8081;
-const instantiateDB = true;
+const port = config.serverPort;
+const instantiateDB = config.instantiateDB;
 
 // Authentication
 // All needed to setup passport:
@@ -60,10 +61,10 @@ async function startServer() {
 
         // Create default admin user.
         await User.create({
-            username: 'admin',
-            password: 'admin',
-            realName: 'Admin',
-            email: 'admin@nothing',
+            username: config.adminUsername,
+            password: config.adminPassword,
+            realName: config.adminRealName,
+            email: config.adminEmail,
             roles: ['admin','user']
         });
     }
