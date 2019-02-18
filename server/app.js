@@ -9,7 +9,7 @@ const session = require('express-session');
 const flash = require('connect-flash');
 
 const {isAdmin, hasRole} = require('./auth/auth');
-
+const authRouter = require('./routes/auth');
 
 // Models
 const crudRouter = require('./routes/crud');
@@ -25,7 +25,7 @@ const instantiateDB = config.instantiateDB;
 //app.use(cookieParser()); // Not needed anymore?? See: https://github.com/expressjs/session
 app.use(flash());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({ secret: 'something_so_secret' }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -60,6 +60,7 @@ for (let i=0; i<config.models.length; i++) {
 
 // Note: must be protected, only for admins
 app.use('/users', isAdmin, crudRouter(User));
+app.use('/auth', authRouter);
 
 // Serve the static files in the client folder.
 app.use('/', express.static( path.join(__dirname, '../client') ));
