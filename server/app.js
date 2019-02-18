@@ -30,6 +30,15 @@ app.use(session({ secret: 'something_so_secret' }));
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Allow CORS.
+if (config.cors === true) {
+    app.use(function(req, res, next) {
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        next();
+    });
+}
+
 app.post('/login',
     passport.authenticate('local', {
         successRedirect: '/',

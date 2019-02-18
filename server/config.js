@@ -1,7 +1,8 @@
 module.exports = {
     serverPort: 8081,
-    // If true then the existing database tables will be dropped and replaced.
+    cors: true,
 
+    // If true then the existing database tables will be dropped and replaced.
     // Also a default admin user will be created.
     instantiateDB: true,
 
