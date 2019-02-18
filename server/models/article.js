@@ -1,8 +1,8 @@
 /*
  * Model for an article document.
  */
-module.exports = (sequelize, DataTypes) => {
-    const Article = sequelize.define('article', {
+module.exports = (name, sequelize, DataTypes) => {
+    const Article = sequelize.define(name, {
         title: DataTypes.STRING,
         author: DataTypes.STRING,
         issue: DataTypes.STRING,

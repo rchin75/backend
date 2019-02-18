@@ -12,9 +12,8 @@ var {isAdmin} = require('./auth/auth');
 
 
 // Models
-const {Doc, Article, Event, User} = require('./models');
 const crudRouter = require('./routes/crud');
-const {sequelize} = require('./models');
+const {sequelize, models, User} = require('./models');
 
 // Express server
 const app = express();
@@ -43,10 +42,12 @@ app.use(express.json());
 // Support URL-encoded bodies;
 app.use(express.urlencoded({extended: true}));
 
-// Docs CRUD operations route
-app.use('/docs', crudRouter(Doc));
-app.use('/articles', crudRouter(Article));
-app.use('/events', crudRouter(Event));
+// CRUD operations routes are dynamically generated from the config.
+for(let i=0; i<config.models.length; i++) {
+    let model = config.models[i];
+    app.use(model.path, crudRouter(models[model.name]));
+}
+
 // Note: must be protected, only for admins
 app.use('/users', isAdmin, crudRouter(User));
 

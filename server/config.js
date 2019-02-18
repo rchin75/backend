@@ -18,5 +18,15 @@ module.exports = {
     adminUsername: 'admin',
     adminPassword: 'admin',
     adminRealName: 'Admin',
-    adminEmail: 'admin@nothing'
+    adminEmail: 'admin@nothing',
+
+    // CRUD models
+    // name: The name of the model and its underlying table name. Each name must be unique and in camel-case.
+    // path: The URL path for CRUD operations.
+    // model: The sequelize model file (without .js extension) to use as specified in the models-folder.
+    models: [
+        {name: 'doc', path: '/docs', model: 'doc'},
+        {name: 'article', path: '/articles', model: 'article'},
+        {name: 'event', path: '/events', model: 'event'},
+    ]
 };

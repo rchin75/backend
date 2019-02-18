@@ -3,9 +3,6 @@
  */
 
 const config = require('./../config');
-const DocModel = require('./doc');
-const ArticleModel = require('./article');
-const EventModel = require('./event');
 const UserModel = require('./user');
 
 // Create sqlite database connection.
@@ -20,12 +17,19 @@ const sequelize = new Sequelize(config.databaseName, config.databaseUsername, co
 });
 
 // Create the models.
-const Doc = DocModel(sequelize, Sequelize);
-const Article = ArticleModel(sequelize, Sequelize);
-const Event = EventModel(sequelize, Sequelize);
 const User = UserModel(sequelize, Sequelize);
+
+// Dynamically create the CRUD models from the config.
+const models = {};
+for (let i = 0; i < config.models.length; i++) {
+    let configModel = config.models[i];
+    // Load the sequelize model file.
+    let model = require(`./${configModel.model}`);
+    // Instantiate a new model.
+    models[configModel.name] = model(configModel.name, sequelize, Sequelize);
+}
 
 // sequelize is also exported because it is used in app.js to instantiate the database tables.
 module.exports = {
-    sequelize, Doc, Article, Event, User
+    sequelize, models, User
 };
