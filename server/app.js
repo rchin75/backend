@@ -6,9 +6,9 @@ const passport = require('./auth/passport');
 ///const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
-var flash = require('connect-flash');
+const flash = require('connect-flash');
 
-var {isAdmin} = require('./auth/auth');
+const {isAdmin, hasRole} = require('./auth/auth');
 
 
 // Models
@@ -24,7 +24,8 @@ const instantiateDB = config.instantiateDB;
 // All needed to setup passport:
 //app.use(cookieParser()); // Not needed anymore?? See: https://github.com/expressjs/session
 app.use(flash());
-app.use(bodyParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(session({ secret: 'something_so_secret' }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -43,9 +44,9 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 // CRUD operations routes are dynamically generated from the config.
-for(let i=0; i<config.models.length; i++) {
+for (let i=0; i<config.models.length; i++) {
     let model = config.models[i];
-    app.use(model.path, crudRouter(models[model.name]));
+    app.use(model.path, hasRole(model.role), crudRouter(models[model.name]));
 }
 
 // Note: must be protected, only for admins

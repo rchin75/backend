@@ -25,8 +25,8 @@ module.exports = {
     // path: The URL path for CRUD operations.
     // model: The sequelize model file (without .js extension) to use as specified in the models-folder.
     models: [
-        {name: 'doc', path: '/docs', model: 'doc'},
-        {name: 'article', path: '/articles', model: 'article'},
-        {name: 'event', path: '/events', model: 'event'},
+        {name: 'doc', path: '/docs', model: 'doc', role: null},
+        {name: 'article', path: '/articles', model: 'article', role: 'user'},
+        {name: 'event', path: '/events', model: 'event', role: 'user'},
     ]
 };
