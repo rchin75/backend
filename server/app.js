@@ -9,6 +9,7 @@ const session = require('express-session');
 const flash = require('connect-flash');
 
 const {isAdmin, hasRole} = require('./auth/auth');
+const {hashPassword} = require('./auth/hash');
 const authRouter = require('./routes/auth');
 
 // Models
@@ -74,7 +75,7 @@ async function startServer() {
         // Create default admin user.
         await User.create({
             username: config.adminUsername,
-            password: config.adminPassword,
+            password: await hashPassword(config.adminPassword),
             realName: config.adminRealName,
             email: config.adminEmail,
             roles: ['admin','user']

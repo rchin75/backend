@@ -42,7 +42,7 @@ module.exports = (Doc) => {
 
     // Delete a doc.
     router.delete('/:id', (req, res) => {
-        Doc.findById(parseInt(req.params.id)).then(doc =>{
+        Doc.findByPk(parseInt(req.params.id)).then(doc =>{
             doc.destroy().then(() => {
                 res.send(doc);
             })
@@ -99,7 +99,7 @@ module.exports = (Doc) => {
             if (req.user && (Doc.tableName !== 'users')) {
                 update.editor = req.user.username;
             }
-            Doc.findById(parseInt(req.params.id)).then(doc =>{
+            Doc.findByPk(parseInt(req.params.id)).then(doc =>{
                 doc.update(update).then(() => {
                     res.send(doc);
                 })
@@ -112,6 +112,15 @@ module.exports = (Doc) => {
     // Get all docs.
     router.get('/all', (req, res) => {
         Doc.findAll().then(docs =>{
+            // Make sure passwords are not send to the client.
+            for(let i=0; i<docs.length; i++) {
+                if (docs[i].password) {
+                    docs[i].password = '*';
+                } else {
+                    break;
+                }
+            }
+
             res.send(docs);
         }).catch(err =>{
             res.status(400).send(err);
@@ -120,7 +129,12 @@ module.exports = (Doc) => {
 
     // Get a specific doc.
     router.get('/:id?', (req, res) => {
-        Doc.findById(parseInt(req.params.id)).then(doc =>{
+        Doc.findByPk(parseInt(req.params.id)).then(doc =>{
+            // Make sure passwords are not send to the client.
+            if (doc.password) {
+                doc.password = '*';
+            }
+
             res.send(doc);
         }).catch(err =>{
             res.status(400).send(err);

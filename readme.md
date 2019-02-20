@@ -5,6 +5,7 @@ npm run server
 
 # TODO
 
-- bcrypt password fields
-- remove password field from user before sending to client
+- bcryptjs password fields - DONE
+- remove password field from user before sending to client - DONE
+- in crud.js hash passwords in POST and PUT operations.
 - implement a task model for kanban boards
