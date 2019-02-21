@@ -10,6 +10,14 @@ const isAuthenticated = (req, res, next) => {
     }
 };
 
+const loginIfNotAuthenticated = (req, res, next) => {
+    if (req.isAuthenticated()) {
+        return next();
+    } else {
+        return res.redirect('/login');
+    }
+};
+
 const isUser = (req, res, next) => {
     if (req.user && (req.user.roles.indexOf('user') > -1)) {
         return next();
@@ -61,4 +69,4 @@ const hasRole = (role) => {
 };
 
 
-module.exports = {isAuthenticated, isAdmin, isUser, hasRole};
+module.exports = {loginIfNotAuthenticated, isAuthenticated, isAdmin, isUser, hasRole};

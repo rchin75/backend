@@ -8,7 +8,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const flash = require('connect-flash');
 
-const {isAdmin, hasRole} = require('./auth/auth');
+const {loginIfNotAuthenticated, isAdmin, hasRole} = require('./auth/auth');
 const {hashPassword} = require('./auth/hash');
 const authRouter = require('./routes/auth');
 
@@ -27,7 +27,11 @@ const instantiateDB = config.instantiateDB;
 app.use(flash());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(session({ secret: 'something_so_secret' }));
+app.use(session({
+    secret: 'something_so_secret',
+    resave: true,
+    saveUninitialized: true
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -40,18 +44,17 @@ if (config.cors === true) {
     });
 }
 
+app.use('/login', express.static( path.join(__dirname, '../login-client')));
 app.post('/login',
     passport.authenticate('local', {
         successRedirect: '/',
-        failureRedirect: '/login',
+        failureRedirect: '/login?failed=1',
         failureFlash: true })
 );
 
-
-// Support JSON encoded bodies.
-app.use(express.json());
-// Support URL-encoded bodies;
-app.use(express.urlencoded({extended: true}));
+// Replaced by bodyParser (above):
+///app.use(express.json());
+///app.use(express.urlencoded({extended: true}));
 
 // CRUD operations routes are dynamically generated from the config.
 for (let i=0; i<config.models.length; i++) {
@@ -64,7 +67,7 @@ app.use('/users', isAdmin, crudRouter(User));
 app.use('/auth', authRouter);
 
 // Serve the static files in the client folder.
-app.use('/', express.static( path.join(__dirname, '../client') ));
+app.use('/', loginIfNotAuthenticated, express.static( path.join(__dirname, '../client') ));
 
 async function startServer() {
     if (instantiateDB) {
