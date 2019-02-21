@@ -8,7 +8,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const flash = require('connect-flash');
 
-const {loginIfNotAuthenticated, isAdmin, hasRole} = require('./auth/auth');
+const {mustBeLoggedIn, isAdmin, hasRole} = require('./auth/auth');
 const {hashPassword} = require('./auth/hash');
 const authRouter = require('./routes/auth');
 
@@ -44,7 +44,7 @@ if (config.cors === true) {
     });
 }
 
-app.use('/login', express.static( path.join(__dirname, '../login-client')));
+app.use('/login', express.static( path.join(__dirname, config.loginPath)));
 app.post('/login',
     passport.authenticate('local', {
         successRedirect: '/',
@@ -67,7 +67,7 @@ app.use('/users', isAdmin, crudRouter(User));
 app.use('/auth', authRouter);
 
 // Serve the static files in the client folder.
-app.use('/', loginIfNotAuthenticated, express.static( path.join(__dirname, '../client') ));
+app.use('/', mustBeLoggedIn(config.mustBeLoggedIn), express.static( path.join(__dirname, config.clientPath) ));
 
 async function startServer() {
     if (instantiateDB) {
