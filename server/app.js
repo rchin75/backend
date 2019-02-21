@@ -51,6 +51,10 @@ app.post('/login',
         failureRedirect: '/login?failed=1',
         failureFlash: true })
 );
+app.get('/logout', function(req, res){
+    req.logout();
+    res.redirect('/');
+});
 
 // Replaced by bodyParser (above):
 ///app.use(express.json());

@@ -90,7 +90,6 @@ module.exports = (Doc) => {
 
     // Save a doc.
     router.put('/:id', (req, res) => {
-
         // Make sure the POST body is json encoded.
         let data = req.body;
         if (!data) {
@@ -136,7 +135,7 @@ module.exports = (Doc) => {
     });
 
     // Get a specific doc.
-    router.get('/:id?', (req, res) => {
+    router.get('/:id', (req, res) => {
         Doc.findByPk(parseInt(req.params.id)).then(doc =>{
             // Make sure passwords are not send to the client.
             if (doc.password) {
