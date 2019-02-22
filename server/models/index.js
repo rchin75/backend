@@ -6,8 +6,7 @@ const config = require('./../config')();
 const UserModel = require('./user');
 
 // Create sqlite database connection.
-const path = require('path');
-const dbPath = path.join(__dirname, `../../${config.databasePath}`);
+const dbPath = config.databasePath;
 const sqlite = require('sqlite3');
 const db = new sqlite.Database(dbPath);
 const Sequelize = require('sequelize');

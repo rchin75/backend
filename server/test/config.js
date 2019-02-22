@@ -1,6 +1,8 @@
 /*
  * A configuration to be used for testing purposes.
  */
+const path = require('path');
+
 module.exports = {
     serverPort: 8081,
     cors: true,
@@ -9,8 +11,8 @@ module.exports = {
     // Also a default admin user will be created.
     instantiateDB: true,
 
-    // Database path relative to the project root folder.
-    databasePath: 'db.sqlite',
+    // Database path. Provide an absolute path here.
+    databasePath: path.join(__dirname, '../../db.sqlite'),
 
     // Database settings
     databaseName: 'database',
