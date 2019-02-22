@@ -4,7 +4,7 @@
   "description": "Generic Backend Server",
   "main": "server/app.js",
   "scripts": {
-    "server": "nodemon --watch server --watch client -e js,html,css,less --delay 1000ms server/app.js",
+    "server": "nodemon --watch server --watch client -e js,html,css,less --delay 1000ms server/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "R.T.H. Chin",
