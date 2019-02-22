@@ -2,7 +2,7 @@
  * Create the models and setup the database connection.
  */
 
-const config = require('./../config');
+const config = require('./../config')();
 const UserModel = require('./user');
 
 // Create sqlite database connection.

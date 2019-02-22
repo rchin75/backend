@@ -1,28 +1,29 @@
 const express = require('express');
 const path = require('path');
-const config = require('./config');
-
-const passport = require('./auth/passport');
-///const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const flash = require('connect-flash');
 
-const {mustBeLoggedIn, isAdmin, hasRole} = require('./auth/auth');
-const {hashPassword} = require('./auth/hash');
-const authRouter = require('./routes/auth');
-
-// Models
-const crudRouter = require('./routes/crud');
-const {sequelize, models, User} = require('./models');
-
 // Express server
 const app = express();
 
-
 module.exports = (configuration) => {
+    // Note: the config us used to setup the sequelize models, so must we set before all else.
+    const config = require('./config')(configuration);
+
+    // Server settings
     const port = config.serverPort;
     const instantiateDB = config.instantiateDB;
+
+    // Authentication
+    const passport = require('./auth/passport');
+    const {mustBeLoggedIn, isAdmin, hasRole} = require('./auth/auth');
+    const {hashPassword} = require('./auth/hash');
+    const authRouter = require('./routes/auth');
+
+    // Models
+    const crudRouter = require('./routes/crud');
+    const {sequelize, models, User} = require('./models');
 
     // Authentication
     // All needed to setup passport:

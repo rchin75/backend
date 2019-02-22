@@ -4,7 +4,8 @@ const server = require('./app');
 
 console.log("Starting server.");
 
-const config = {};
+const config = require('./test/config');
+console.log(config);
 server(config).start().then(()=>{
     console.log('server started.')
 });
