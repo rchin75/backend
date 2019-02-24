@@ -48,7 +48,7 @@ module.exports = (configuration) => {
         });
     }
 
-    app.use('/login', express.static( path.join(__dirname, config.loginPath)));
+    app.use('/login', express.static( config.loginPath ));
     app.post('/login',
         passport.authenticate('local', {
             successRedirect: '/',
@@ -75,7 +75,7 @@ module.exports = (configuration) => {
     app.use('/auth', authRouter);
 
     // Serve the static files in the client folder.
-    app.use('/', mustBeLoggedIn(config.mustBeLoggedIn), express.static( path.join(__dirname, config.clientPath) ));
+    app.use('/', mustBeLoggedIn(config.mustBeLoggedIn), express.static( config.clientPath ));
 
     async function startServer() {
         if (instantiateDB) {

@@ -33,9 +33,9 @@ module.exports = {
 
     // Paths for static routes
     // The directory path for the root /
-    clientPath: '../client',
+    clientPath: path.join(__dirname, '../../client'),
     // The directory path for the login page /login
-    loginPath: '../login-client',
+    loginPath: path.join(__dirname, '../../login-client'),
 
     // CRUD models
     // name: The name of the model and its underlying table name. Each name must be unique and in camel-case.
