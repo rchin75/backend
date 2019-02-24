@@ -26,8 +26,10 @@ module.exports = (Doc) => {
             if ((attribute !== 'id') && (attribute !== 'createdAt') && (attribute !== 'updatedAt')) {
                 // Extract the values and assign these to the doc.
                 if (doc.hasOwnProperty(attribute)) {
-                    if (attribute === 'password' && doc.password && doc.password.length >= minPasswordLength) {
-                        result[attribute] = await hashPassword(doc[attribute]);
+                    if (attribute === 'password') {
+                        if(doc.password && doc.password.length >= minPasswordLength) {
+                            result[attribute] = await hashPassword(doc[attribute]);
+                        }
                     } else {
                         result[attribute] = doc[attribute];
                     }
