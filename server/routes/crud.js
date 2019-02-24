@@ -105,8 +105,13 @@ module.exports = (Doc) => {
                 if (req.user && (Doc.tableName !== 'users')) {
                     update.editor = req.user.username;
                 }
+                console.log('update = ', update);
                 Doc.findByPk(parseInt(req.params.id)).then(doc =>{
                     doc.update(update).then(() => {
+                        if (doc.password) {
+                            doc.password = '*';
+                        }
+                        console.log('updated =', doc);
                         res.send(doc);
                     })
                 }).catch(err =>{
