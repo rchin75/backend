@@ -77,6 +77,11 @@ module.exports = (configuration) => {
     // Serve the static files in the client folder.
     app.use('/', mustBeLoggedIn(config.mustBeLoggedIn), express.static( config.clientPath ));
 
+    if (config.adminPath) {
+        // Serve the static files in the admin folder.
+        app.use('/admin', mustBeLoggedIn(true), isAdmin, express.static( config.adminPath ));
+    }
+
     async function startServer() {
         if (instantiateDB) {
             // Wait for the server to setup.
@@ -98,7 +103,7 @@ module.exports = (configuration) => {
     }
     //startServer();
 
-    return {start: startServer};
+    return {start: startServer, app};
 };
 
 

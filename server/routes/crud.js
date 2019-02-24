@@ -4,6 +4,7 @@
 
 const express = require('express');
 const {hashPassword} = require('./../auth/hash');
+const {sequelize} = require('./../models');
 
 /**
  * Creates a new route instance for CRUD operations on the provided Doc-model.
@@ -84,6 +85,9 @@ module.exports = (Doc) => {
                 doc.editor = req.user.username;
             }
             Doc.create(doc).then(doc => {
+                if (doc.password) {
+                    doc.password = null;
+                }
                 res.send(doc);
             }).catch(err => {
                 res.status(400).send('Failed to save new doc');
@@ -112,7 +116,7 @@ module.exports = (Doc) => {
                 Doc.findByPk(parseInt(req.params.id)).then(doc =>{
                     doc.update(update).then(() => {
                         if (doc.password) {
-                            doc.password = '*';
+                            doc.password = null;
                         }
                         console.log('updated =', doc);
                         res.send(doc);
@@ -126,11 +130,30 @@ module.exports = (Doc) => {
 
     // Get all docs.
     router.get('/all', (req, res) => {
-        Doc.findAll().then(docs =>{
+
+        let options = {};
+        // Ordering. Note: sequelize will escape the column name and the ASC,DESC values.
+        if (req.query.orderBy) {
+            options.order = [[req.query.orderBy, req.query.order === 'DESC' ? 'DESC': 'ASC']];
+        }
+        // Paging or limiting
+        if (req.query.limit) {
+            options.limit = parseInt(req.query.limit);
+        } else {
+            // By default limit to max 1000 records.
+            options.limit = 1000;
+        }
+        if (req.query.offset) {
+            options.offset = parseInt(req.query.offset)
+        }
+
+        console.log("options: ", options);
+
+        Doc.findAll(options).then(docs =>{
             // Make sure passwords are not send to the client.
             for(let i=0; i<docs.length; i++) {
                 if (docs[i].password) {
-                    docs[i].password = '*';
+                    docs[i].password = null;
                 } else {
                     break;
                 }
@@ -147,7 +170,7 @@ module.exports = (Doc) => {
         Doc.findByPk(parseInt(req.params.id)).then(doc =>{
             // Make sure passwords are not send to the client.
             if (doc.password) {
-                doc.password = '*';
+                doc.password = null;
             }
 
             res.send(doc);
