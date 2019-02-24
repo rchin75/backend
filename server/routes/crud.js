@@ -21,11 +21,12 @@ module.exports = (Doc) => {
     async function extractModelAttributeValues(doc) {
         // Loop through all attributes of the sequelize Doc model.
         let result = {};
+        const minPasswordLength = 5;
         for (let attribute in Doc.rawAttributes) {
             if ((attribute !== 'id') && (attribute !== 'createdAt') && (attribute !== 'updatedAt')) {
                 // Extract the values and assign these to the doc.
                 if (doc.hasOwnProperty(attribute)) {
-                    if (attribute === 'password') {
+                    if (attribute === 'password' && doc.password && doc.password.length >= minPasswordLength) {
                         result[attribute] = await hashPassword(doc[attribute]);
                     } else {
                         result[attribute] = doc[attribute];
