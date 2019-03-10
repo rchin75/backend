@@ -91,7 +91,7 @@ module.exports = (configuration) => {
             // Create default admin user.
             await User.create({
                 username: config.adminUsername,
-                password: await hashPassword(config.adminPassword),
+                password: config.adminPassword,
                 realName: config.adminRealName,
                 email: config.adminEmail,
                 roles: ['admin','user']

@@ -3,8 +3,6 @@
  */
 
 const express = require('express');
-const {hashPassword} = require('./../auth/hash');
-const {sequelize} = require('./../models');
 
 /**
  * Creates a new route instance for CRUD operations on the provided Doc-model.
@@ -27,13 +25,7 @@ module.exports = (Doc) => {
             if ((attribute !== 'id') && (attribute !== 'createdAt') && (attribute !== 'updatedAt')) {
                 // Extract the values and assign these to the doc.
                 if (doc.hasOwnProperty(attribute)) {
-                    if (attribute === 'password') {
-                        if(doc.password && doc.password.length >= minPasswordLength) {
-                            result[attribute] = await hashPassword(doc[attribute]);
-                        }
-                    } else {
-                        result[attribute] = doc[attribute];
-                    }
+                    result[attribute] = doc[attribute];
                 }
             }
         }
@@ -112,13 +104,13 @@ module.exports = (Doc) => {
                 if (req.user && (Doc.tableName !== 'users')) {
                     update.editor = req.user.username;
                 }
-                console.log('update = ', update);
+                //console.log('update = ', update);
                 Doc.findByPk(parseInt(req.params.id)).then(doc =>{
                     doc.update(update).then(() => {
                         if (doc.password) {
                             doc.password = null;
                         }
-                        console.log('updated =', doc);
+                        //console.log('updated =', doc);
                         res.send(doc);
                     })
                 }).catch(err =>{
