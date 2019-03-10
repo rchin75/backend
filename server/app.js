@@ -18,7 +18,6 @@ module.exports = (configuration) => {
     // Authentication
     const passport = require('./auth/passport');
     const {mustBeLoggedIn, isAdmin, hasRole} = require('./auth/auth');
-    const {hashPassword} = require('./auth/hash');
     const authRouter = require('./routes/auth');
 
     // Models
