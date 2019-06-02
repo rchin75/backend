@@ -23,7 +23,15 @@ const models = {};
 for (let i = 0; i < config.models.length; i++) {
     let configModel = config.models[i];
     // Load the sequelize model file.
-    let model = require(`./${configModel.model}`);
+    let model = null;
+    if (typeof configModel.model === 'string' || configModel.model instanceof String) {
+        // Use a pre-defined model from this backend.
+        model = require(`./${configModel.model}`);
+    } else {
+        // A custom model instance was provided.
+        model = configModel.model;
+    }
+
     // Instantiate a new model.
     models[configModel.name] = model(configModel.name, sequelize, Sequelize);
 }
