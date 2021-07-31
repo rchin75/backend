@@ -1,9 +1,19 @@
-# How to
+# Backend #
 
-## Running
+This is a generic REST backend that supports CRUD operations on relational database tables.
+It also provides basic user authentication.
+
+## Disclaimers ##
+
+This is my hobby project, and it is work in progress.
+
+Use at your own risk. This project comes without any warranties whatsoever.
+
+## Running ##
 npm run server
 
-# TODO
+
+# TODO #
 
 - bcryptjs password fields - DONE
 - remove password field from user before sending to client - DONE
