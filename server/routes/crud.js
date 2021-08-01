@@ -17,8 +17,7 @@ module.exports = (Doc) => {
      * @param doc The provided doc.
      * @return {{}} Object with extracted values to use.
      */
-    async function extractModelAttributeValues(doc) {
-        // todo: this function is no longer asynchronous, so no need for async anymore.
+    function extractModelAttributeValues(doc) {
         // Loop through all attributes of the sequelize Doc model.
         let result = {};
         for (let attribute in Doc.rawAttributes) {
@@ -69,22 +68,19 @@ module.exports = (Doc) => {
             res.status(400).send('Invalid body');
             return;
         }
-        // Extracting attribute values is async so we need to await the result inside an async function call.
-        (async ()=>{
-            doc = await extractModelAttributeValues(doc);
-            if (req.user &&  (Doc.tableName !== 'users')) {
-                doc.owner = req.user.username;
-                doc.editor = req.user.username;
+        doc = extractModelAttributeValues(doc);
+        if (req.user &&  (Doc.tableName !== 'users')) {
+            doc.owner = req.user.username;
+            doc.editor = req.user.username;
+        }
+        Doc.create(doc).then(doc => {
+            if (doc.password) {
+                doc.password = null;
             }
-            Doc.create(doc).then(doc => {
-                if (doc.password) {
-                    doc.password = null;
-                }
-                res.send(doc);
-            }).catch(err => {
-                res.status(400).send('Failed to save new doc');
-            });
-        })();
+            res.send(doc);
+        }).catch(err => {
+            res.status(400).send('Failed to save new doc');
+        });
     });
 
     // Save a doc.
@@ -98,25 +94,22 @@ module.exports = (Doc) => {
             // 400: bad request.
             res.status(400).send('Invalid body: no ID');
         } else {
-            // Extracting attribute values is async so we need to await the result inside an async function call.
-            (async ()=>{
-                let update = await extractModelAttributeValues(data);
-                if (req.user && (Doc.tableName !== 'users')) {
-                    update.editor = req.user.username;
-                }
-                //console.log('update = ', update);
-                Doc.findByPk(parseInt(req.params.id)).then(doc =>{
-                    doc.update(update).then(() => {
-                        if (doc.password) {
-                            doc.password = null;
-                        }
-                        //console.log('updated =', doc);
-                        res.send(doc);
-                    })
-                }).catch(err =>{
-                    res.status(400).send(err);
-                });
-            })();
+            let update = extractModelAttributeValues(data);
+            if (req.user && (Doc.tableName !== 'users')) {
+                update.editor = req.user.username;
+            }
+            //console.log('update = ', update);
+            Doc.findByPk(parseInt(req.params.id)).then(doc =>{
+                doc.update(update).then(() => {
+                    if (doc.password) {
+                        doc.password = null;
+                    }
+                    //console.log('updated =', doc);
+                    res.send(doc);
+                })
+            }).catch(err =>{
+                res.status(400).send(err);
+            });
         }
     });
 
